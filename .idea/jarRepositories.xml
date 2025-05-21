@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="central" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="github" />
+      <option name="name" value="github" />
+      <option name="url" value="https://repo.joshuasalcedo.io/repository/maven-releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="joshuasalcedo-nexus-snapshots" />
+      <option name="name" value="Joshua Salcedo Nexus Repository - Snapshots" />
+      <option name="url" value="https://repo.joshuasalcedo.io/repository/maven-releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="joshuasalcedo-nexus" />
+      <option name="name" value="joshuasalcedo-nexus" />
+      <option name="url" value="https://repo.joshuasalcedo.io/repository/maven-releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="github" />
+      <option name="name" value="github" />
+      <option name="url" value="https://maven.pkg.github.com/joshuasalcedo-io/pretty-javadocs" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="joshuasalcedo-nexus" />
+      <option name="name" value="joshuasalcedo-nexus" />
+      <option name="url" value="https://repo.joshuasalcedo.io/repository/maven-snapshots/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="joshuasalcedo-nexus-releases" />
+      <option name="name" value="Joshua Salcedo Nexus Repository - Releases" />
+      <option name="url" value="https://repo.joshuasalcedo.io/repository/maven-releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="central" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="joshuasalcedo-nexus-snapshots" />
+      <option name="name" value="Joshua Salcedo Nexus Repository - Snapshots" />
+      <option name="url" value="https://repo.joshuasalcedo.io/repository/maven-snapshots/" />
+    </remote-repository>
+  </component>
+</project>

@@ -1,5 +1,6 @@
 package io.joshuasalcedo.library.logging.model;
 
+import io.joshuasalcedo.library.logging.core.LogLevel;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +11,7 @@ class LogLevelTest {
         assertDoesNotThrow(() -> {
             LogLevel[] logLevels = LogLevel.values();
             for (LogLevel logLevel : logLevels) {
-                assertNotNull(logLevel.getValue());
+                assertNotNull(logLevel.toString());
 
             }
         });

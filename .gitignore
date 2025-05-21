@@ -1,4 +1,65 @@
+# Maven build directory
 target/
-**.class
-target
 
+# Compiled Java classes
+*.class
+
+# IntelliJ IDEA files
+*.iml
+.idea/
+*.iws
+*.ipr
+.idea_modules/
+
+# Eclipse files
+.classpath
+.project
+.settings/
+.metadata/
+
+# NetBeans files
+nbproject/
+nb-configuration.xml
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+log/
+logs/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Build related
+.mvn/
+mvnw
+mvnw.cmd
+bin/
+build/
+
+# Project specific
+application.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# Maven wrapper files
+.mvn/wrapper/maven-wrapper.jar

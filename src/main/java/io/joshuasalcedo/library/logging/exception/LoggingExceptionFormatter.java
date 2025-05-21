@@ -1,9 +1,8 @@
 package io.joshuasalcedo.library.logging.exception;
 
 import io.joshuasalcedo.pretty.core.theme.TerminalStyle;
-import io.joshuasalcedo.pretty.core.utils.TextUtils;
 import io.joshuasalcedo.pretty.core.utils.TerminalUtils;
-import io.joshuasalcedo.library.logging.model.LogLevel;
+import io.joshuasalcedo.library.logging.core.LogLevel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.joshuasalcedo.library</groupId>
-    <artifactId>logging</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>aop-logger</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>AspectJ Logging Library</name>
@@ -17,9 +17,9 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skip.aspectj>false</skip.aspectj>
+        <skip.tests>false</skip.tests>
 
         <!-- Dependency versions -->
-        <pretty-java-core.version>0.1.4</pretty-java-core.version>
         <aspectj.version>1.9.24</aspectj.version>
         <junit-jupiter.version>5.10.2</junit-jupiter.version>
         <mockito-core.version>5.10.0</mockito-core.version>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>io.joshuasalcedo.library</groupId>
             <artifactId>pretty-java-core</artifactId>
-            <version>${pretty-java-core.version}</version>
+            <version>0.2.6</version>
         </dependency>
 
         <!-- AspectJ dependencies -->
@@ -117,6 +117,8 @@
             <version>${mockito-core.version}</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- No mockito-inline needed with recent Mockito versions -->
     </dependencies>
 
     <build>
@@ -197,44 +199,7 @@
                     <classpathScope>compile</classpathScope>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>run-demo</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>io.joshuasalcedo.library.demo.LogEnumDemo</mainClass>
-                        </configuration>
-                    </execution>
 
-                    <execution>
-                        <id>run-exception</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>io.joshuasalcedo.library.demo.ExceptionFactoryDemo</mainClass>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>run-enhanced-logger</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>io.joshuasalcedo.library.demo.ContextAwareThrowableDemo</mainClass>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>run-aspect</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>io.joshuasalcedo.library.demo.AspectLoggingDemo</mainClass>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
@@ -327,8 +292,14 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <!-- Enable AspectJ weaving during test execution -->
-                    <argLine>-javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar</argLine>
+                    <!-- Fix test directory structure -->
+                    <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <!-- Avoid AspectJ weaving for tests -->
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <skipTests>${skip.tests}</skipTests>
                 </configuration>
             </plugin>
         </plugins>

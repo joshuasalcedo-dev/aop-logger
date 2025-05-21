@@ -1,10 +1,9 @@
 package io.joshuasalcedo.library.logging.aspect;
 
-
-import io.joshuasalcedo.library.logging.model.LogLevel;
-
-import io.joshuasalcedo.library.logging.model.Logger;
-import io.joshuasalcedo.library.logging.model.LoggerFactory;
+import io.joshuasalcedo.library.logging.core.Logger;
+import io.joshuasalcedo.library.logging.factory.LoggerFactory;
+import io.joshuasalcedo.library.logging.core.LogLevel;
+import io.joshuasalcedo.library.logging.output.console.ConsoleLogger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,15 +24,34 @@ import java.io.StringWriter;
 @Aspect
 public class LoggingAspect {
 
-    // Logger for the aspect
-    private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
+    // IMPORTANT: Fix circular dependency - Use lazy initialization
+    private static class LoggerHolder {
+        // This is only initialized when first accessed
+        static final Logger LOGGER = initLogger();
+
+        private static Logger initLogger() {
+            try {
+                return LoggerFactory.getLogger(LoggingAspect.class);
+            } catch (Throwable t) {
+                // Fallback to direct instance if factory fails during initialization
+                return ConsoleLogger.create(LoggingAspect.class);
+            }
+        }
+    }
+
+    // Access the logger using this method to avoid static initialization issues
+    private static Logger getLogger() {
+        return LoggerHolder.LOGGER;
+    }
 
     // Set of packages and classes to exclude from logging
     private static final Set<String> EXCLUDED_PACKAGES = new HashSet<>(Arrays.asList(
-            "io.joshuasalcedo.library.logging.model",
-            "io.joshuasalcedo.library.logging.console",
+            "io.joshuasalcedo.library.logging.core",
+            "io.joshuasalcedo.library.logging.output.console",
             "io.joshuasalcedo.library.logging.aspect",
-            "io.joshuasalcedo.pretty.core"
+            "io.joshuasalcedo.library.logging.factory",
+            "io.joshuasalcedo.pretty.api.model.error.EnhancedThrowable",
+            "io.joshuasalcedo.pretty.core.model.error.EnhancedThrowable"
     ));
 
     // Set of method names to exclude from logging
@@ -53,8 +71,8 @@ public class LoggingAspect {
     /**
      * Pointcut for logging framework methods to exclude
      */
-    @Pointcut("within(io.joshuasalcedo.library.logging.model.*) || " +
-            "within(io.joshuasalcedo.library.logging.console.*) || " +
+    @Pointcut("within(io.joshuasalcedo.library.logging.core.*) || " +
+            "within(io.joshuasalcedo.library.logging.output.console.*) || " +
             "within(io.joshuasalcedo.pretty.core..*)")
     public void loggingFrameworkMethods() {}
 
@@ -80,7 +98,7 @@ public class LoggingAspect {
         String args = formatArguments(joinPoint.getArgs());
 
         // Log method entry
-        logger.debug(className + "." + methodName + "(" + args + ")");
+        getLogger().debug(className + "." + methodName + "(" + args + ")");
 
         long startTime = System.currentTimeMillis();
 
@@ -92,7 +110,7 @@ public class LoggingAspect {
             long executionTime = System.currentTimeMillis() - startTime;
 
             // Log method exit with result
-            logger.debug(className + "." + methodName + " completed in " + executionTime + "ms");
+            getLogger().debug(className + "." + methodName + " completed in " + executionTime + "ms");
 
             return result;
 
@@ -102,7 +120,7 @@ public class LoggingAspect {
             PrintWriter pw = new PrintWriter(sw);
             ex.printStackTrace(pw);
 
-            logger.error(className + "." + methodName + " threw " +
+            getLogger().error(className + "." + methodName + " threw " +
                     ex.getClass().getName() + ": " + ex.getMessage(), ex);
 
             // Rethrow the exception

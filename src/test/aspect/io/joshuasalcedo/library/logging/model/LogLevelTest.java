@@ -1,6 +1,7 @@
 package io.joshuasalcedo.library.logging.model;
 
 import io.joshuasalcedo.library.logging.core.LogLevel;
+import io.joshuasalcedo.pretty.core.api.PrettySystem;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,13 +13,17 @@ class LogLevelTest {
             LogLevel[] logLevels = LogLevel.values();
             for (LogLevel logLevel : logLevels) {
                 assertNotNull(logLevel.toString());
+                System.out.println(logLevel.toString());
 
             }
         });
     }
 
     @Test
-    void getEmoji() {
+    void testStackTrace() {
+       assertThrows(Exception.class, () -> {
+           System.out.print(1/0);
+       });
     }
 
     @Test

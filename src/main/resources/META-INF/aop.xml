@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aspectj>
+    <!-- Define the aspects to be applied -->
+    <aspects>
+        <!-- Basic Maven-style logging aspect -->
+        <aspect name="io.joshuasalcedo.library.logging.aspect.LoggingAspect"/>
+
+        <!-- Enhanced logging aspect with context tracking and exception enhancement -->
+        <aspect name="io.joshuasalcedo.library.logging.aspect.EnhancedLoggingAspect"/>
+    </aspects>
+
+    <!-- Configure the AspectJ weaver -->
+    <weaver options="-showWeaveInfo -XnoInline">
+        <!-- Include packages to be woven (client code should customize this) -->
+        <include within="io.joshuasalcedo..*"/>
+        <include within="com.example..*"/> <!-- Example client package -->
+
+        <!-- Exclude logging framework packages to avoid circular references -->
+        <exclude within="io.joshuasalcedo.library.logging.aspect.*"/>
+        <exclude within="io.joshuasalcedo.library.logging.core.*"/>
+        <exclude within="io.joshuasalcedo.library.logging.factory.*"/>
+        <exclude within="io.joshuasalcedo.library.logging.output.*"/>
+        <exclude within="io.joshuasalcedo.pretty..*"/>
+    </weaver>
+</aspectj>

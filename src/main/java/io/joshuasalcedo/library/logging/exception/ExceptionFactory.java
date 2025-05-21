@@ -1,6 +1,6 @@
 package io.joshuasalcedo.library.logging.exception;
 
-import io.joshuasalcedo.library.logging.model.LogLevel;
+import io.joshuasalcedo.library.logging.core.LogLevel;
 import io.joshuasalcedo.pretty.core.theme.TerminalStyle;
 
 import java.util.HashMap;

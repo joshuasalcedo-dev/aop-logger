@@ -2,8 +2,9 @@ package io.joshuasalcedo.library.logging.exception;
 
 import io.joshuasalcedo.pretty.core.model.error.EnhancedThrowable;
 import io.joshuasalcedo.pretty.core.model.error.PrettyException;
+import io.joshuasalcedo.pretty.core.model.stream.PrettyPrintStream;
 import io.joshuasalcedo.pretty.core.theme.TerminalStyle;
-import io.joshuasalcedo.library.logging.model.LogLevel;
+import io.joshuasalcedo.library.logging.core.LogLevel;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -23,6 +24,9 @@ public class ContextAwareException extends PrettyException {
     
     // Log level for styling
     private LogLevel logLevel;
+    
+    // Suggested solution
+    private String solution;
     
     /**
      * Constructs a new context-aware throwable with null as its detail message.
@@ -113,6 +117,26 @@ public class ContextAwareException extends PrettyException {
     }
     
     /**
+     * Adds a suggested solution to fix the issue.
+     *
+     * @param solution the suggested solution
+     * @return this throwable instance for method chaining
+     */
+    public ContextAwareException withSolution(String solution) {
+        this.solution = solution;
+        return this;
+    }
+    
+    /**
+     * Gets the suggested solution.
+     *
+     * @return the suggested solution or null if none has been set
+     */
+    public String getSolution() {
+        return solution;
+    }
+    
+    /**
      * Sets the log level for this throwable.
      * This will adjust the colors and styles to match the specified log level.
      *
@@ -177,13 +201,43 @@ public class ContextAwareException extends PrettyException {
     }
     
     /**
+     * Prints the enhanced stack trace to the specified print stream.
+     * This method extends the functionality provided by EnhancedThrowable.
+     *
+     * @param out the print stream to print to
+     */
+    public void printEnhancedStackTrace(PrettyPrintStream out) {
+        // Get the style
+        TerminalStyle style = logLevel != null ? logLevel.getStyle() : TerminalStyle.ERROR;
+        
+        // Print the header
+        out.style(style).println(this.getClass().getSimpleName() + ": " + getMessage());
+        out.reset();
+        
+        // Print the stack trace
+        printStackTrace(out);
+    }
+    
+    /**
      * Prints a comprehensive exception report with runtime context and suggested solutions.
      * This overrides the parent method to include our context information.
      * 
      * @param out The output stream to print to
      */
     public void printExceptionReport(PrintStream out) {
-        super.printExceptionReport(out, context);
+        Map<String, Object> reportContext = new HashMap<>();
+        
+        // Add context
+        if (context != null) {
+            reportContext.putAll(context);
+        }
+        
+        // Add solution if provided
+        if (solution != null) {
+            reportContext.put("Suggested Solution", solution);
+        }
+        
+        super.printExceptionReport(out, reportContext);
     }
     
     /**
@@ -205,6 +259,11 @@ public class ContextAwareException extends PrettyException {
             mergedContext.putAll(additionalContext);
         }
         
+        // Add solution if provided
+        if (solution != null) {
+            mergedContext.put("Suggested Solution", solution);
+        }
+        
         // Call parent method with merged context
         super.printExceptionReport(out, mergedContext);
     }
@@ -218,6 +277,7 @@ public class ContextAwareException extends PrettyException {
         private final Map<String, Object> context = new HashMap<>();
         private LogLevel logLevel;
         private final Map<String, TerminalStyle> packageHighlights = new HashMap<>();
+        private String solution;
         
         public Builder(String message) {
             this.message = message;
@@ -245,6 +305,11 @@ public class ContextAwareException extends PrettyException {
             return this;
         }
         
+        public Builder solution(String solution) {
+            this.solution = solution;
+            return this;
+        }
+        
         public Builder highlightPackage(String packagePrefix, TerminalStyle style) {
             this.packageHighlights.put(packagePrefix, style);
             return this;
@@ -263,6 +328,11 @@ public class ContextAwareException extends PrettyException {
             // Set log level
             if (logLevel != null) {
                 throwable.withLogLevel(logLevel);
+            }
+            
+            // Add solution
+            if (solution != null) {
+                throwable.withSolution(solution);
             }
             
             // Add package highlighting
